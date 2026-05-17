@@ -66,7 +66,8 @@ public class InventorySorter {
     }
 
     private static ItemStack findBestForLayout(List<ItemStack> pool, String savedId) {
-        Identifier id = Identifier.parse(savedId);
+        Identifier id = Identifier.tryParse(savedId);
+        if (id == null) return null;
         Item savedItem = BuiltInRegistries.ITEM.getOptional(id).orElse(null);
         if (savedItem == null || savedItem == Items.AIR) return null;
 
