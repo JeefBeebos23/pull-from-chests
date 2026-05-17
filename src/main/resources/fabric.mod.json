@@ -3,7 +3,7 @@
   "id": "pull_from_chests",
   "version": "${version}",
   "name": "Pull From Chests",
-  "description": "Adds a Restock button that tops off your inventory stacks from nearby chests.",
+  "description": "Adds Restock, Sort, and Save Layout buttons to your inventory for quick item management.",
   "authors": ["JeefBeebos23"],
   "license": "MIT",
   "environment": "*",

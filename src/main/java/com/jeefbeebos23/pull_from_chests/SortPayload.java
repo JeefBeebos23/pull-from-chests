@@ -12,6 +12,8 @@ import java.util.List;
 public record SortPayload(List<String> hotbarLayout) implements CustomPacketPayload {
 
     public SortPayload {
+        if (hotbarLayout.size() != 9)
+            throw new IllegalArgumentException("hotbarLayout must have exactly 9 entries, got " + hotbarLayout.size());
         hotbarLayout = Collections.unmodifiableList(hotbarLayout);
     }
 
