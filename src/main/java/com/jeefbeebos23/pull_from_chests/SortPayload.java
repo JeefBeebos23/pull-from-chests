@@ -6,9 +6,14 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public record SortPayload(List<String> hotbarLayout) implements CustomPacketPayload {
+
+    public SortPayload {
+        hotbarLayout = Collections.unmodifiableList(hotbarLayout);
+    }
 
     public static final Type<SortPayload> TYPE =
         new Type<>(Identifier.fromNamespaceAndPath(PullFromChests.MOD_ID, "sort"));
@@ -24,7 +29,7 @@ public record SortPayload(List<String> hotbarLayout) implements CustomPacketPayl
             buf -> {
                 List<String> layout = new ArrayList<>(9);
                 for (int i = 0; i < 9; i++) {
-                    layout.add(buf.readBoolean() ? buf.readUtf() : null);
+                    layout.add(buf.readBoolean() ? buf.readUtf(256) : null);
                 }
                 return new SortPayload(layout);
             }
