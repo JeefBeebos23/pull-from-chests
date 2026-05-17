@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class HotbarLayout {
 
+    // FabricLoader is fully initialized before any mod class is loaded — safe to call here.
     private static final Path CONFIG_PATH =
         FabricLoader.getInstance().getConfigDir()
             .resolve("pull_from_chests_hotbar_layout.json");
@@ -28,7 +30,7 @@ public class HotbarLayout {
         if (!Files.exists(CONFIG_PATH)) return emptyLayout();
         try {
             String json = Files.readString(CONFIG_PATH);
-            java.lang.reflect.Type type = new TypeToken<List<String>>() {}.getType();
+            Type type = new TypeToken<List<String>>() {}.getType();
             List<String> layout = GSON.fromJson(json, type);
             if (layout == null || layout.size() != 9) return emptyLayout();
             return layout;
@@ -37,7 +39,7 @@ public class HotbarLayout {
         }
     }
 
-    private static List<String> emptyLayout() {
+    public static List<String> emptyLayout() {
         return new ArrayList<>(Arrays.asList(new String[9]));
     }
 }
