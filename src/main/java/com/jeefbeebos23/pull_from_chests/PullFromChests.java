@@ -24,7 +24,8 @@ public class PullFromChests implements ModInitializer {
 
         PayloadTypeRegistry.serverboundPlay().register(SortPayload.TYPE, SortPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(SortPayload.TYPE, (payload, context) ->
-            context.server().execute(() -> {/* wired in Task 3 */})
+            context.server().execute(() ->
+                InventorySorter.sort(context.player(), payload.hotbarLayout()))
         );
     }
 
