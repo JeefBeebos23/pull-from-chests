@@ -6,8 +6,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.equipment.Equippable;
@@ -124,6 +127,32 @@ public class InventorySorter {
 
     private static int enchantCount(ItemStack stack) {
         return stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).size();
+    }
+
+    public static void sortChest(ServerPlayer player) {
+        AbstractContainerMenu menu = player.containerMenu;
+        if (!(menu instanceof ChestMenu chestMenu)) return;
+
+        Container container = chestMenu.getContainer();
+        int size = container.getContainerSize();
+
+        List<ItemStack> pool = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            ItemStack stack = container.getItem(i);
+            if (!stack.isEmpty()) pool.add(stack);
+            container.setItem(i, ItemStack.EMPTY);
+        }
+
+        pool.sort(Comparator.comparingInt(InventorySorter::categoryOrder)
+            .thenComparingInt(s -> -tierScore(s))
+            .thenComparingInt(s -> -enchantCount(s)));
+
+        for (int i = 0; i < pool.size(); i++) {
+            container.setItem(i, pool.get(i));
+        }
+
+        container.setChanged();
+        chestMenu.broadcastChanges();
     }
 
     private static int categoryOrder(ItemStack stack) {

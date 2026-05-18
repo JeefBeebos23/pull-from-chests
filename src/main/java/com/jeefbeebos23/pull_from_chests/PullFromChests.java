@@ -27,6 +27,12 @@ public class PullFromChests implements ModInitializer {
             context.server().execute(() ->
                 InventorySorter.sort(context.player(), payload.hotbarLayout()))
         );
+
+        PayloadTypeRegistry.serverboundPlay().register(SortChestPayload.TYPE, SortChestPayload.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(SortChestPayload.TYPE, (payload, context) ->
+            context.server().execute(() ->
+                InventorySorter.sortChest(context.player()))
+        );
     }
 
     private static void restock(ServerPlayer player) {
