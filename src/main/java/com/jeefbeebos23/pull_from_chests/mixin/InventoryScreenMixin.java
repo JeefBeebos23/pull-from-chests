@@ -38,7 +38,7 @@ public abstract class InventoryScreenMixin extends AbstractContainerScreen<Inven
         addRenderableWidget(Button.builder(
             Component.literal("Restock"),
             btn -> ClientPlayNetworking.send(new RestockPayload()))
-            .pos(bx, this.topPos + 60)
+            .pos(bx, this.topPos + 84)
             .size(70, 20)
             .build()
         );
@@ -46,7 +46,7 @@ public abstract class InventoryScreenMixin extends AbstractContainerScreen<Inven
         addRenderableWidget(Button.builder(
             Component.literal("Sort"),
             btn -> ClientPlayNetworking.send(new SortPayload(HotbarLayout.load())))
-            .pos(bx, this.topPos + 84)
+            .pos(bx, this.topPos + 108)
             .size(70, 20)
             .build()
         );
@@ -64,7 +64,7 @@ public abstract class InventoryScreenMixin extends AbstractContainerScreen<Inven
                 }
                 HotbarLayout.save(layout);
             })
-            .pos(bx, this.topPos + 108)
+            .pos(bx, this.topPos + 132)
             .size(70, 20)
             .build()
         );
